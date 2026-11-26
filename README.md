@@ -5,9 +5,15 @@
   <p>
     <a href="https://z2fa.devlab.vn"><strong>Live App (z2fa.devlab.vn)</strong></a>
     &nbsp;·&nbsp;
+    <a href="#screenshots">Screenshots</a>
+    &nbsp;·&nbsp;
     <a href="https://github.com/zane-tv/z2fa/issues">Report Issue</a>
   </p>
 </div>
+
+<p align="center">
+  <img src="docs/screenshots/desktop-home.png" alt="Z2FA Unified Editorial Workspace" width="100%" />
+</p>
 
 ---
 
@@ -16,6 +22,75 @@
 **Z2FA** combines the speed of an instant TOTP generator with a refined personal authenticator vault, crafted in a **Warm Editorial Bauhaus** aesthetic (`#fdfcfc` Eggshell, `#f5f3f1` Warm Taupe, `#000000` Ink) on desktop and a **Thumb-First Native App Shell** on mobile.
 
 Every cryptographic operation — TOTP token generation, QR image decoding, and vault encryption — executes **100% locally inside your browser** via the native Web Crypto API. Zero secrets or account metadata are ever transmitted to any server.
+
+---
+
+## Screenshots
+
+### Desktop Experience
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/desktop-bulk-studio.png" alt="Bulk Live TOTP Stream & Dynamic Island" />
+      <br />
+      <sub><strong>Bulk Live TOTP Stream &amp; Dynamic Island Toast</strong></sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/desktop-dark-mode.png" alt="Warm Ink Dark Mode" />
+      <br />
+      <sub><strong>Warm Ink Dark Mode</strong></sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/desktop-command-palette.png" alt="Command Palette Quick Jump & Copy" />
+      <br />
+      <sub><strong><code>⌘K</code> Quick Jump &amp; Instant Copy</strong></sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/desktop-qr-transfer.png" alt="Device Transfer via QR Code" />
+      <br />
+      <sub><strong>Device Transfer via <code>otpauth://</code> QR Code</strong></sub>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <img src="docs/screenshots/desktop-aes256-vault.png" alt="AES-256-GCM Vault Protection" width="68%" />
+      <br />
+      <sub><strong>Zero-Knowledge PBKDF2 + AES-256-GCM Vault Encryption</strong></sub>
+    </td>
+  </tr>
+</table>
+
+### Mobile Native-Feel App Shell
+
+<table>
+  <tr>
+    <td width="25%" align="center">
+      <img src="docs/screenshots/mobile-instant-pass.png" alt="Mobile Instant TOTP Studio & Live Pass" />
+      <br />
+      <sub><strong>Instant Studio &amp; Live Pass</strong></sub>
+    </td>
+    <td width="25%" align="center">
+      <img src="docs/screenshots/mobile-vault.png" alt="Mobile Saved Vault" />
+      <br />
+      <sub><strong>Saved Vault &amp; Filter Pills</strong></sub>
+    </td>
+    <td width="25%" align="center">
+      <img src="docs/screenshots/mobile-bottom-sheet.png" alt="Mobile Add Account Bottom Sheet" />
+      <br />
+      <sub><strong>Spring Bottom Sheet</strong></sub>
+    </td>
+    <td width="25%" align="center">
+      <img src="docs/screenshots/mobile-tools-faq.png" alt="Mobile Security, Backup & Guide" />
+      <br />
+      <sub><strong>Security, Backup &amp; Guide</strong></sub>
+    </td>
+  </tr>
+</table>
+
+---
 
 ## Key Features
 
@@ -60,6 +135,7 @@ pnpm run preview
 ## Project Structure
 
 ```text
+├── docs/screenshots/       # Desktop & Mobile UI screenshots for documentation
 ├── public/                 # Favicon, PWA icons, Open Graph card, robots.txt, sitemap.xml, llms.txt
 ├── src/
 │   ├── components/
