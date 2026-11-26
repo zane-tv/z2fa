@@ -156,7 +156,7 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
   const lineCount = Math.min(5, Math.max(2, inputValue.split('\n').length));
 
   return (
-    <section className="relative overflow-hidden rounded-[24px] bg-[#f5f3f1] p-6 sm:p-8 dark:bg-[#191816]">
+    <section className="relative overflow-hidden rounded-[22px] sm:rounded-[24px] bg-[#f5f3f1] p-4 sm:p-8 dark:bg-[#191816]">
       {/* Decorative Product Sphere Artwork (Violet Spark #0447ff + Ember Orange #ff4704 — non-interactive) */}
       <motion.div
         aria-hidden="true"

@@ -70,7 +70,7 @@ export const App: React.FC = () => {
     return saved === 'en' ? 'en' : 'vi';
   });
 
-  const [mobileTab, setMobileTab] = useState<MobileTab>('vault');
+  const [mobileTab, setMobileTab] = useState<MobileTab>('quick');
 
   const t = TRANSLATIONS[lang];
 
@@ -1257,21 +1257,7 @@ export const App: React.FC = () => {
         className="fixed inset-x-0 bottom-0 z-40 border-t border-[#ebe8e4] bg-[#fdfcfc]/92 px-3 pt-2 pb-[max(0.55rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden dark:border-[#292623] dark:bg-[#11100f]/92"
       >
         <div className="mx-auto grid max-w-md grid-cols-5 items-center">
-          {/* Tab 1: Vault */}
-          <button
-            type="button"
-            onClick={() => setMobileTab('vault')}
-            className={`flex flex-col items-center justify-center gap-1 py-1 text-[11px] font-medium transition-colors ${
-              mobileTab === 'vault'
-                ? 'text-[#000000] dark:text-[#fdfcfc]'
-                : 'text-[#a59f97]'
-            }`}
-          >
-            <LayoutGrid className="h-5 w-5" />
-            <span>{lang === 'vi' ? 'Kho 2FA' : 'Vault'}</span>
-          </button>
-
-          {/* Tab 2: Quick Studio */}
+          {/* Tab 1 (Default): Quick Studio */}
           <button
             type="button"
             onClick={() => setMobileTab('quick')}
@@ -1283,6 +1269,20 @@ export const App: React.FC = () => {
           >
             <Zap className="h-5 w-5" />
             <span>{lang === 'vi' ? 'Lấy nhanh' : 'Instant'}</span>
+          </button>
+
+          {/* Tab 2: Vault */}
+          <button
+            type="button"
+            onClick={() => setMobileTab('vault')}
+            className={`relative flex flex-col items-center justify-center gap-1 py-1 text-[11px] font-medium transition-colors ${
+              mobileTab === 'vault'
+                ? 'text-[#000000] dark:text-[#fdfcfc]'
+                : 'text-[#a59f97]'
+            }`}
+          >
+            <LayoutGrid className="h-5 w-5" />
+            <span>{lang === 'vi' ? 'Kho 2FA' : 'Vault'}</span>
           </button>
 
           {/* Center Primary Action Pill (+ Add Account) */}
