@@ -1,52 +1,93 @@
 <div align="center">
   <img src="public/favicon.svg" width="76" height="76" alt="Z2FA Logo" />
-  <h1>Z2FA — Precision 2FA Studio & Vault</h1>
-  <p><strong>Trình lấy mã 2FA tức thì & Kho lưu trữ bảo mật AES-256 trực tiếp trên trình duyệt.</strong></p>
-  <p><a href="https://z2fa.devlab.vn"><strong>🌐 Live Web: z2fa.devlab.vn</strong></a> · <a href="https://2fa-rouge-five.vercel.app">Mirror Vercel</a></p>
+  <h1>Z2FA — Precision 2FA Studio &amp; Vault</h1>
+  <p><strong>Instant RFC 6238 TOTP Generator &amp; Zero-Knowledge AES-256 Browser Vault.</strong></p>
+  <p>
+    <a href="https://z2fa.devlab.vn"><strong>Live App (z2fa.devlab.vn)</strong></a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/zane-tv/z2fa/issues">Report Issue</a>
+  </p>
 </div>
 
 ---
 
-## Giới thiệu
+## Overview
 
-**Z2FA** kết hợp sự nhanh gọn của một công cụ lấy mã TOTP tức thì (hỗ trợ dán đơn lẻ, hàng loạt chuỗi `UID|PASS|2FA_SECRET`, `otpauth://`, ảnh chụp màn hình mã QR) với trải nghiệm quản lý kho 2FA cá nhân tinh tế theo ngôn ngữ thiết kế **Warm Editorial Bauhaus** (`#fdfcfc` Eggshell, `#f5f3f1` Warm Taupe, `#000000` Ink).
+**Z2FA** combines the speed of an instant TOTP generator with a refined personal authenticator vault, crafted in a **Warm Editorial Bauhaus** aesthetic (`#fdfcfc` Eggshell, `#f5f3f1` Warm Taupe, `#000000` Ink) on desktop and a **Thumb-First Native App Shell** on mobile.
 
-Toàn bộ quá trình tạo mã, đọc mã QR và mã hóa kho đều diễn ra **100% trên trình duyệt (Zero-Knowledge Client-Side)** thông qua Web Crypto API — không gửi bất kỳ khóa bí mật nào lên máy chủ.
+Every cryptographic operation — TOTP token generation, QR image decoding, and vault encryption — executes **100% locally inside your browser** via the native Web Crypto API. Zero secrets or account metadata are ever transmitted to any server.
 
-## Tính năng chính
+## Key Features
 
-- **Instant TOTP Studio (Lấy mã nhanh 1 chạm)**:
-  - Tự động bóc tách Secret Base32 từ chuỗi đơn, nhiều dòng định dạng `UID|PASS|2FA_SECRET|EMAIL`, link `otpauth://totp/...` hoặc mã chuyển thiết bị `otpauth-migration://` từ Google Authenticator.
-  - Hỗ trợ nhấn **`Ctrl+V` / `Cmd+V`** ở bất kỳ đâu trên trang để dán thẳng ảnh chụp màn hình mã QR, kéo-thả ảnh QR, hoặc mở **Camera** quét trực tiếp.
-- **Hiệu ứng 60fps & Smart Copy chống trễ nhịp**:
-  - **Spring Odometer Digits**: Từng chữ số cuộn trục lò xo mượt mà mỗi chu kỳ 30 giây.
-  - **Colorful Perimeter Countdown**: Viền tiến trình chạy quanh mép thẻ chuyển sắc trực quan (`Xanh ngọc` → `Vàng hổ phách ≤ 8s` → `Đỏ cam ≤ 4s`).
-  - **Smart Copy**: Tự hé lộ **Mã kế tiếp** khi còn `≤ 5s`; nếu bấm sao chép lúc `≤ 2s` cuối chu kỳ, Z2FA tự động copy sẵn mã mới kèm thông báo **Dynamic Island**.
-- **Kho lưu trữ thông minh & Bảo mật AES-256-GCM**:
-  - Tự nhận diện logo màu sắc của hơn 15+ nền tảng phổ biến (Google, GitHub, Facebook, Binance, Discord, OpenAI, Telegram, Microsoft, AWS, Cloudflare, Shopee, TikTok, Steam...).
-  - Hỗ trợ Ghim (Pin), phân loại theo Tag với chấm chỉ báo trượt mượt, tìm kiếm nhanh **`⌘K / Ctrl+K`** và xuất ngược mã QR cho từng tài khoản.
-  - Khóa bảo vệ kho tùy chọn chuẩn **AES-256-GCM** (`PBKDF2 210.000 vòng`), Xuất/Nhập file Backup `.json`, hỗ trợ song ngữ **VI / EN**, **Light / Dark Mode** và cài đặt **PWA Offline**.
+- **Instant TOTP Studio**
+  - Paste a single Base32 secret, `otpauth://totp/...` URI, Google Authenticator export URI (`otpauth-migration://`), or bulk multi-line strings (`UID|PASS|2FA_SECRET|EMAIL`) to stream live 6-digit / 8-digit tokens immediately.
+  - Press **`Ctrl+V` / `Cmd+V`** anywhere on the page with a QR screenshot in your clipboard, drag and drop a QR image, or scan directly with your device camera.
+- **60fps Motion & Anti-Expiry Smart Copy**
+  - **Spring Odometer Reels**: Individual digits roll smoothly with physical spring dynamics on every 30-second cycle.
+  - **Color-Coded Perimeter Countdown**: Card borders and timer badges transition smoothly from Emerald (`> 8s`) to Warm Amber (`≤ 8s`) and Ember (`≤ 4s`).
+  - **Smart Copy**: Automatically previews the upcoming code at `≤ 5s` remaining, and copies the fresh next-cycle token automatically if you tap copy during the final `2s` window — complete with **Dynamic Island** feedback and mobile haptics.
+- **Personal Vault & Zero-Knowledge Security**
+  - Automatic colorful brand recognition for 15+ popular services (Google, GitHub, Facebook, Binance, Discord, OpenAI, Telegram, Microsoft, Apple, AWS, Cloudflare, Shopee, TikTok, Steam, X, and more).
+  - Pin favorites, filter with animated category pills, jump & copy via **`⌘K / Ctrl+K`**, and generate transfer QR codes for any saved account.
+  - Optional **AES-256-GCM** master password protection (`PBKDF2` with `210,000` SHA-256 iterations) plus JSON backup export/import.
+- **Native-Feel Mobile Experience & Offline PWA**
+  - Dedicated mobile bottom tab bar (`Instant` · `Vault` · `+` · `Scan QR` · `Tools`), spring bottom sheets, and full offline Progressive Web App (PWA) support across iOS, Android, macOS, and Windows.
+  - Bilingual interface (**English** & **Vietnamese**) with **Light** and **Dark** modes.
 
-## Công nghệ sử dụng
+## Tech Stack
 
-- **Frontend**: React 19, TypeScript, Vite 6
-- **Styling & Typography**: Tailwind CSS v4, Inter (300/400/500) & Geist Mono
-- **Motion**: Framer Motion (`spring` odometer, FLIP `layout` cards, Dynamic Island)
-- **Cryptography & QR**: Native Web Crypto API (`HMAC SHA-1/256/512`, `AES-256-GCM`, `PBKDF2`), `jsQR`, `qrcode`, `vite-plugin-pwa`
+- **Framework**: React 19, TypeScript, Vite 6
+- **Styling & Typography**: Tailwind CSS v4, Inter (`300` / `400` / `500`) & Geist Mono
+- **Animations**: Framer Motion (`spring` odometer reels, FLIP `layout` cards, Dynamic Island)
+- **Cryptography & QR**: Web Crypto API (`HMAC SHA-1/256/512`, `AES-256-GCM`, `PBKDF2`), `jsQR`, `qrcode`, `vite-plugin-pwa`
 
-## Cài đặt & Chạy cục bộ
+## Getting Started
 
 ```bash
-# Cài đặt thư viện
+# Install dependencies
 pnpm install
 
-# Chạy máy chủ phát triển (http://localhost:5173)
+# Start local development server (http://localhost:5173)
 pnpm run dev
 
-# Kiểm tra TypeScript & đóng gói bản Production
+# Type-check and build production bundle
 pnpm run build
+
+# Preview production build locally
+pnpm run preview
 ```
 
-## Bản quyền
+## Project Structure
+
+```text
+├── public/                 # Favicon, PWA icons, Open Graph card, robots.txt, sitemap.xml, llms.txt
+├── src/
+│   ├── components/
+│   │   ├── DynamicIslandToast.tsx
+│   │   ├── Modals.tsx
+│   │   ├── OdometerCode.tsx
+│   │   ├── PerimeterCountdown.tsx
+│   │   ├── QuickStudio.tsx
+│   │   ├── SeoEditorialSection.tsx
+│   │   ├── TotpCard.tsx
+│   │   └── Z2FALogo.tsx
+│   ├── lib/
+│   │   ├── brands.tsx      # Brand SVG detection & color plates
+│   │   ├── cryptoVault.ts  # PBKDF2 + AES-256-GCM Web Crypto encryption
+│   │   ├── i18n.ts         # Bilingual EN / VI dictionary
+│   │   ├── parser.ts       # Base32, bulk UID|PASS|2FA, otpauth & Google Migration parser
+│   │   ├── qr.ts           # Local Canvas QR decoder & QR image generator
+│   │   └── totp.ts         # RFC 6238 / RFC 4226 HMAC engine
+│   ├── App.tsx
+│   └── index.css           # Design tokens & editorial surfaces
+└── vercel.json             # Security & immutable asset caching headers
+```
+
+## Security Model
+
+1. **Zero Network Calls for Secrets**: Secrets never leave browser memory or `localStorage`.
+2. **Authenticated Encryption**: Enabling a vault password derives a 256-bit key using `PBKDF2-HMAC-SHA256` (`210,000` iterations, random 16-byte salt) and encrypts your vault with `AES-256-GCM` (random 12-byte IV on every write).
+
+## License
 
 MIT © [zane-tv](https://github.com/zane-tv)
