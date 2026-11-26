@@ -2,7 +2,7 @@
   <img src="public/favicon.svg" width="76" height="76" alt="Z2FA Logo" />
   <h1>Z2FA — Precision 2FA Studio & Vault</h1>
   <p><strong>Trình lấy mã 2FA tức thì & Kho lưu trữ bảo mật AES-256 trực tiếp trên trình duyệt.</strong></p>
-  <p><a href="https://2fa-rouge-five.vercel.app"><strong>🌐 Live Demo: 2fa-rouge-five.vercel.app</strong></a></p>
+  <p><a href="https://z2fa.devlab.vn"><strong>🌐 Live Web: z2fa.devlab.vn</strong></a> · <a href="https://2fa-rouge-five.vercel.app">Mirror Vercel</a></p>
 </div>
 
 ---
