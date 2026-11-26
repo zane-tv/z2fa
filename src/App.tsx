@@ -123,7 +123,19 @@ export const App: React.FC = () => {
       const raw = localStorage.getItem(STORAGE_KEYS.PLAIN_ACCOUNTS);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) return parsed;
+        if (Array.isArray(parsed)) {
+          // Migrate legacy demo cards automatically so updated demo labels take effect seamlessly
+          const hasLegacyDemo = parsed.some(
+            (item: VaultAccount) => item?.isDemo && String(item.label).toLowerCase().includes('zens')
+          );
+          if (hasLegacyDemo) {
+            const customOnly = parsed.filter((item: VaultAccount) => !item?.isDemo);
+            const refreshed = [...customOnly, ...createDemoAccounts()];
+            localStorage.setItem(STORAGE_KEYS.PLAIN_ACCOUNTS, JSON.stringify(refreshed));
+            return refreshed;
+          }
+          return parsed;
+        }
       }
       if (!localStorage.getItem(STORAGE_KEYS.INITIALIZED)) {
         const demos = createDemoAccounts();
@@ -1240,8 +1252,10 @@ export const App: React.FC = () => {
         {/* Mobile Tools / Security Tab (< md) */}
         {mobileTab === 'settings' && renderMobileSettingsTab()}
 
-        {/* Shared Semantic Editorial Guide, FAQ & Footer (Mobile-First Indexing Parity) */}
-        <SeoEditorialSection lang={lang} />
+        {/* Shared Semantic Editorial Guide, FAQ & Footer (On Mobile shown inside Tools tab so Quick/Vault tabs stay pure App!) */}
+        <div className={mobileTab === 'settings' ? 'block' : 'hidden md:block'}>
+          <SeoEditorialSection lang={lang} />
+        </div>
       </main>
 
       {/* Native Mobile Bottom Tab Bar (< md, Thumb-Zone Navigation + Safe Area Inset) */}

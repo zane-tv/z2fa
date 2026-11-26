@@ -6,7 +6,7 @@ export function createDemoAccounts(): VaultAccount[] {
     {
       id: 'demo-google',
       issuer: 'Google',
-      label: 'zens.studio@gmail.com',
+      label: 'minh.anh@gmail.com',
       secret: 'JBSWY3DPEHPK3PXP',
       digits: 6,
       period: 30,
@@ -19,7 +19,7 @@ export function createDemoAccounts(): VaultAccount[] {
     {
       id: 'demo-github',
       issuer: 'GitHub',
-      label: '@zens-dev',
+      label: '@alex-nguyen',
       secret: 'GEZDGNBVGY3TQOJQGEZDGNBV',
       digits: 6,
       period: 30,
@@ -32,7 +32,7 @@ export function createDemoAccounts(): VaultAccount[] {
     {
       id: 'demo-binance',
       issuer: 'Binance',
-      label: 'spot.vault@zens.io',
+      label: 'spot.wallet@proton.me',
       secret: 'MFRGGZDFMZTWQ2LKNNWG23Q',
       digits: 6,
       period: 30,
@@ -58,7 +58,7 @@ export function createDemoAccounts(): VaultAccount[] {
     {
       id: 'demo-openai',
       issuer: 'OpenAI',
-      label: 'api-admin@zens.ai',
+      label: 'team@devlab.vn',
       secret: 'ONSWG4TFOQQHI2LPNZSXK43U',
       digits: 6,
       period: 30,
@@ -71,7 +71,7 @@ export function createDemoAccounts(): VaultAccount[] {
     {
       id: 'demo-discord',
       issuer: 'Discord',
-      label: 'zens#0001',
+      label: 'nova.studio#2026',
       secret: 'ORSXG5BAMN2W64TFOQ2G643U',
       digits: 6,
       period: 30,
@@ -84,6 +84,6 @@ export function createDemoAccounts(): VaultAccount[] {
   ];
 }
 
-export const SAMPLE_BULK_INPUT = `Google | product.team@gmail.com | JBSWY3DPEHPK3PXP
-10009482716352|PassDemo@2026|KRSXG5CTMVRXEZLUKN2XAZLS|ads.meta@zens.vn
-otpauth://totp/GitHub:release-bot?secret=GEZDGNBVGY3TQOJQGEZDGNBV&issuer=GitHub`;
+export const SAMPLE_BULK_INPUT = `Google | minh.khoa@gmail.com | JBSWY3DPEHPK3PXP
+10009482716352|PassDemo@2026|KRSXG5CTMVRXEZLUKN2XAZLS|ads.meta@devlab.vn
+otpauth://totp/GitHub:alex-nguyen?secret=GEZDGNBVGY3TQOJQGEZDGNBV&issuer=GitHub`;

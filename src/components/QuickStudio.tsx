@@ -8,7 +8,10 @@ import {
   Check,
   ClipboardPaste,
   Copy,
+  FileSpreadsheet,
   ImageUp,
+  KeyRound,
+  QrCode,
   Wand2,
   X,
 } from 'lucide-react';
@@ -19,7 +22,7 @@ import { computeTotpSnapshot, getCycleMetrics } from '../lib/totp';
 import { resolveBrandVisual } from '../lib/brands';
 import { SAMPLE_BULK_INPUT } from '../lib/demoAccounts';
 import { OdometerCode } from './OdometerCode';
-import { CircularTimerBadge } from './PerimeterCountdown';
+import { CircularTimerBadge, PerimeterCountdown } from './PerimeterCountdown';
 
 interface QuickStudioProps {
   inputValue: string;
@@ -54,6 +57,7 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const parsedEntries = useMemo(() => parseSmartInput(inputValue), [inputValue]);
+  const globalMetrics = getCycleMetrics(nowMs, 30);
 
   const singleSecretKey = parsedEntries.length === 1 ? parsedEntries[0].secret : '';
   useEffect(() => {
@@ -66,7 +70,9 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
   }, [singleSecretKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const globalCycle = Math.floor(nowMs / 30000);
-  const [codeMap, setCodeMap] = useState<Record<string, { code: string; nextCode: string; cycle: number }>>({});
+  const [codeMap, setCodeMap] = useState<
+    Record<string, { code: string; nextCode: string; cycle: number }>
+  >({});
 
   useEffect(() => {
     let cancelled = false;
@@ -112,6 +118,7 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
   };
 
   const handlePasteButton = async () => {
+    navigator.vibrate?.(10);
     try {
       if (navigator.clipboard?.read) {
         try {
@@ -136,6 +143,7 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
   };
 
   const triggerRowCopied = (id: string) => {
+    navigator.vibrate?.(12);
     setCopiedId(id);
     window.setTimeout(() => {
       setCopiedId((prev) => (prev === id ? null : prev));
@@ -143,6 +151,7 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
   };
 
   const handleCopyAllBulk = () => {
+    navigator.vibrate?.(12);
     const lines = parsedEntries
       .map((entry) => {
         const snap = getLiveSnapshot(entry);
@@ -156,8 +165,8 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
   const lineCount = Math.min(5, Math.max(2, inputValue.split('\n').length));
 
   return (
-    <section className="relative overflow-hidden rounded-[22px] sm:rounded-[24px] bg-[#f5f3f1] p-4 sm:p-8 dark:bg-[#191816]">
-      {/* Decorative Product Sphere Artwork (Violet Spark #0447ff + Ember Orange #ff4704 — non-interactive) */}
+    <section className="relative overflow-hidden rounded-[22px] bg-[#f5f3f1] p-4 sm:rounded-[24px] sm:p-8 dark:bg-[#191816]">
+      {/* Decorative Product Sphere Artwork */}
       <motion.div
         aria-hidden="true"
         animate={{
@@ -165,27 +174,107 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
           rotate: [0, 8, 0],
         }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        className="product-sphere-orb pointer-events-none absolute -top-20 -right-16 h-60 w-60 rounded-full opacity-45 blur-2xl"
+        className="product-sphere-orb pointer-events-none absolute -top-20 -right-16 h-52 w-52 sm:h-60 sm:w-60 rounded-full opacity-35 sm:opacity-45 blur-2xl"
       />
 
-      {/* Editorial Header Row */}
-      <div className="relative z-10 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) onUploadQrFile(file);
+          e.target.value = '';
+        }}
+      />
+
+      {/* =========================================================
+          MOBILE NATIVE APP HEADER & 3-TILE ACTION DECK (< md)
+         ========================================================= */}
+      <div className="relative z-10 md:hidden">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <CircularTimerBadge
+              progress={globalMetrics.progress}
+              remainingSec={globalMetrics.remainingSec}
+            />
+            <span className="text-[14px] font-medium text-[#000000] dark:text-[#fdfcfc]">
+              {t.quickStudioBadge}
+            </span>
+          </div>
+
+          {!inputValue.trim() ? (
+            <button
+              type="button"
+              onClick={() => onInputChange(SAMPLE_BULK_INPUT)}
+              className="inline-flex items-center gap-1 rounded-full border border-[#ebe8e4] bg-[#fdfcfc] px-3 py-1 text-[12px] font-medium text-[#44403b] active:scale-95 dark:border-[#292623] dark:bg-[#11100f] dark:text-[#fdfcfc]"
+            >
+              <Wand2 className="h-3 w-3 text-[#0447ff]" />
+              <span>{t.sampleSecretBtn}</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => onInputChange('')}
+              className="inline-flex items-center gap-1 rounded-full border border-[#ebe8e4] bg-[#fdfcfc] px-3 py-1 text-[12px] font-medium text-[#ff4704] active:scale-95 dark:border-[#292623] dark:bg-[#11100f]"
+            >
+              <X className="h-3.5 w-3.5" />
+              <span>{t.clearBtn}</span>
+            </button>
+          )}
+        </div>
+
+        {/* 3 Thumb-Friendly Native Action Tiles */}
+        <div className="mt-3.5 grid grid-cols-3 gap-2">
+          <button
+            type="button"
+            onClick={handlePasteButton}
+            className="whisper-shadow flex flex-col items-center justify-center gap-1.5 rounded-[16px] bg-[#000000] py-3 text-[#fdfcfc] transition-transform active:scale-95 dark:bg-[#fdfcfc] dark:text-[#000000]"
+          >
+            <ClipboardPaste className="h-5 w-5" />
+            <span className="text-[12px] font-medium">{t.pasteClipboardBtn}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="flex flex-col items-center justify-center gap-1.5 rounded-[16px] border border-[#ebe8e4] bg-[#fdfcfc] py-3 text-[#000000] transition-transform active:scale-95 dark:border-[#292623] dark:bg-[#11100f] dark:text-[#fdfcfc]"
+          >
+            <ImageUp className="h-5 w-5 text-[#0447ff]" />
+            <span className="text-[12px] font-medium">{t.uploadQrBtn}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onOpenCamera}
+            className="flex flex-col items-center justify-center gap-1.5 rounded-[16px] border border-[#ebe8e4] bg-[#fdfcfc] py-3 text-[#000000] transition-transform active:scale-95 dark:border-[#292623] dark:bg-[#11100f] dark:text-[#fdfcfc]"
+          >
+            <Camera className="h-5 w-5 text-[#10B981]" />
+            <span className="text-[12px] font-medium">{t.scanCameraBtn}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* =========================================================
+          DESKTOP EDITORIAL HEADER & PILL CONTROLS (>= md)
+         ========================================================= */}
+      <div className="relative z-10 hidden flex-col justify-between gap-5 md:flex lg:flex-row lg:items-end">
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#ebe8e4] bg-[#fdfcfc] px-3 py-1 text-[11px] font-medium text-[#44403b] dark:border-[#292623] dark:bg-[#11100f] dark:text-[#a59f97]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#ff4704]" />
             <span>{t.quickStudioBadge}</span>
           </div>
 
-          <h1 className="font-editorial-display mt-3 text-[24px] leading-[1.15] text-[#000000] sm:text-[36px] dark:text-[#fdfcfc]">
+          <h1 className="font-editorial-display mt-3 text-[36px] leading-[1.13] text-[#000000] dark:text-[#fdfcfc]">
             {t.quickStudioTitle}
           </h1>
 
-          <p className="mt-2 text-[14px] leading-[1.55] text-[#777169] sm:text-[15px] dark:text-[#a59f97]">
+          <p className="mt-2 text-[15px] leading-[1.55] text-[#777169] dark:text-[#a59f97]">
             {t.quickStudioDesc}
           </p>
         </div>
 
-        {/* 9999px Outline & Filled Pill Controls */}
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
@@ -201,27 +290,16 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
             onClick={() => fileInputRef.current?.click()}
             className="inline-flex items-center gap-1.5 rounded-full border border-[#e5e5e5] bg-[#fdfcfc] px-3.5 py-1.5 text-[13px] font-medium text-[#000000] transition-all hover:bg-[#ebe8e4]/60 active:scale-97 dark:border-[#2f2c28] dark:bg-[#11100f] dark:text-[#fdfcfc] dark:hover:bg-[#262421]"
           >
-            <ImageUp className="h-3.5 w-3.5" />
+            <ImageUp className="h-3.5 w-3.5 text-[#0447ff]" />
             <span>{t.uploadQrBtn}</span>
           </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) onUploadQrFile(file);
-              e.target.value = '';
-            }}
-          />
 
           <button
             type="button"
             onClick={onOpenCamera}
             className="inline-flex items-center gap-1.5 rounded-full border border-[#e5e5e5] bg-[#fdfcfc] px-3.5 py-1.5 text-[13px] font-medium text-[#000000] transition-all hover:bg-[#ebe8e4]/60 active:scale-97 dark:border-[#2f2c28] dark:bg-[#11100f] dark:text-[#fdfcfc] dark:hover:bg-[#262421]"
           >
-            <Camera className="h-3.5 w-3.5" />
+            <Camera className="h-3.5 w-3.5 text-[#10B981]" />
             <span>{t.scanCameraBtn}</span>
           </button>
 
@@ -247,19 +325,41 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
         </div>
       </div>
 
-      {/* Geist Mono Input Area (6px crisp Bauhaus input radius on Eggshell surface) */}
-      <div className="relative z-10 mt-5">
+      {/* =========================================================
+          SHARED SMART SECRET INPUT BOX (App-styled on Mobile)
+         ========================================================= */}
+      <div className="relative z-10 mt-3 md:mt-5">
         <textarea
           rows={lineCount}
           value={inputValue}
           onChange={(e) => onInputChange(e.target.value)}
           placeholder={t.quickInputPlaceholder}
           spellCheck={false}
-          className="font-mono-tabular inset-hairline w-full resize-none rounded-[10px] sm:rounded-[8px] border border-[#ebe8e4] bg-[#fdfcfc] px-4 py-3.5 text-[16px] sm:text-[13px] leading-[1.6] text-[#000000] placeholder:font-sans placeholder:text-[14px] placeholder:text-[#a59f97] transition-colors focus:border-[#000000] focus:outline-none dark:border-[#292623] dark:bg-[#11100f] dark:text-[#fdfcfc] dark:placeholder:text-[#777169] dark:focus:border-[#fdfcfc]"
+          className="font-mono-tabular inset-hairline w-full resize-none rounded-[16px] md:rounded-[8px] border border-[#ebe8e4] bg-[#fdfcfc] px-4 py-3.5 text-[16px] md:text-[13px] leading-[1.55] md:leading-[1.69] text-[#000000] placeholder:font-sans placeholder:text-[13.5px] md:placeholder:text-[14px] placeholder:text-[#a59f97] transition-colors focus:border-[#000000] focus:outline-none dark:border-[#292623] dark:bg-[#11100f] dark:text-[#fdfcfc] dark:placeholder:text-[#777169] dark:focus:border-[#fdfcfc]"
         />
       </div>
 
-      {/* Live Decoded Results */}
+      {/* Mobile Compact Format Chips when Empty (Zero Wall-of-Text, Pure Native Feel) */}
+      {!inputValue.trim() && (
+        <div className="relative z-10 mt-3 flex items-center justify-between gap-1.5 overflow-x-auto no-scrollbar md:hidden">
+          <span className="inline-flex flex-shrink-0 items-center gap-1 rounded-full border border-[#ebe8e4] bg-[#fdfcfc]/80 px-2.5 py-1 text-[11px] text-[#777169] dark:border-[#292623] dark:bg-[#11100f] dark:text-[#a59f97]">
+            <KeyRound className="h-3 w-3 text-[#10B981]" />
+            Base32 Secret
+          </span>
+          <span className="inline-flex flex-shrink-0 items-center gap-1 rounded-full border border-[#ebe8e4] bg-[#fdfcfc]/80 px-2.5 py-1 text-[11px] text-[#777169] dark:border-[#292623] dark:bg-[#11100f] dark:text-[#a59f97]">
+            <FileSpreadsheet className="h-3 w-3 text-[#0447ff]" />
+            UID|PASS|2FA
+          </span>
+          <span className="inline-flex flex-shrink-0 items-center gap-1 rounded-full border border-[#ebe8e4] bg-[#fdfcfc]/80 px-2.5 py-1 text-[11px] text-[#777169] dark:border-[#292623] dark:bg-[#11100f] dark:text-[#a59f97]">
+            <QrCode className="h-3 w-3 text-[#ff4704]" />
+            otpauth / QR
+          </span>
+        </div>
+      )}
+
+      {/* =========================================================
+          LIVE DECODED RESULTS
+         ========================================================= */}
       <AnimatePresence mode="wait">
         {inputValue.trim() && parsedEntries.length === 0 && (
           <motion.div
@@ -267,13 +367,13 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
-            className="relative z-10 mt-3 rounded-[10px] border border-[#ebe8e4] bg-[#fdfcfc] px-4 py-2.5 text-[13px] text-[#777169] dark:border-[#292623] dark:bg-[#11100f] dark:text-[#a59f97]"
+            className="relative z-10 mt-3 rounded-[14px] md:rounded-[10px] border border-[#ebe8e4] bg-[#fdfcfc] px-4 py-2.5 text-[13px] text-[#777169] dark:border-[#292623] dark:bg-[#11100f] dark:text-[#a59f97]"
           >
             {t.invalidInputHint}
           </motion.div>
         )}
 
-        {/* SINGLE SECRET ELEVATED WHITE CARD */}
+        {/* SINGLE SECRET LIVE TOKEN PASS */}
         {parsedEntries.length === 1 && (() => {
           const entry = parsedEntries[0];
           const snap = getLiveSnapshot(entry);
@@ -283,6 +383,7 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
           const alreadySaved = savedSecretsSet.has(entry.secret);
           const remainingSec = snap?.remainingSec ?? 30;
           const progress = snap?.progress ?? 1;
+          const isCopied = copiedId === entry.id;
 
           return (
             <motion.div
@@ -291,10 +392,13 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -6, scale: 0.99 }}
               transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-              className="whisper-shadow relative z-10 mt-5 overflow-hidden rounded-[20px] bg-[#fdfcfc] p-5 sm:p-6 dark:bg-[#11100f]"
+              className="whisper-shadow relative z-10 mt-4 md:mt-5 overflow-hidden rounded-[20px] bg-[#fdfcfc] p-4 sm:p-6 dark:bg-[#11100f]"
             >
-              <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
-                {/* Left: Live Giant Odometer + Click to Copy */}
+              {/* Colorful Perimeter Countdown around the Live Pass */}
+              <PerimeterCountdown progress={progress} remainingSec={remainingSec} radius={19.25} />
+
+              <div className="relative z-20 flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
+                {/* Tap-to-Copy Wallet Token Area */}
                 <div
                   onClick={() => {
                     if (!snap) return;
@@ -310,65 +414,92 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
                       triggerRowCopied(entry.id);
                     }
                   }}
-                  className="group flex cursor-pointer flex-wrap items-center gap-4 rounded-xl transition-transform active:scale-[0.99]"
+                  className="group cursor-pointer rounded-2xl transition-transform active:scale-[0.985]"
                 >
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-[12px] ${brand.plateClass}`}>
-                    {brand.icon}
+                  {/* Top Row on Mobile: Brand + Issuer + Timer */}
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div
+                        className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[12px] ${brand.plateClass}`}
+                      >
+                        {brand.icon}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="truncate text-[15px] font-medium text-[#000000] dark:text-[#fdfcfc]">
+                          {effectiveIssuer}
+                        </p>
+                        <p className="truncate text-[12px] text-[#777169] dark:text-[#a59f97]">
+                          {effectiveLabel}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="lg:hidden">
+                      <CircularTimerBadge progress={progress} remainingSec={remainingSec} />
+                    </div>
                   </div>
 
-                  <div>
-                    <div className="flex items-center gap-3">
-                      <OdometerCode
-                        code={snap?.code ?? '000000'}
-                        remainingSec={remainingSec}
-                        size="lg"
-                      />
+                  {/* Center Hero Code + Copy Pill */}
+                  <div className="mt-4 flex items-center justify-between gap-3 rounded-[16px] bg-[#f5f3f1] px-4 py-3 lg:mt-3 lg:bg-transparent lg:p-0 dark:bg-[#191816] lg:dark:bg-transparent">
+                    <OdometerCode
+                      code={snap?.code ?? '000000'}
+                      remainingSec={remainingSec}
+                      size="lg"
+                    />
+
+                    <div className="flex items-center gap-2">
+                      <div className="hidden lg:block">
+                        <CircularTimerBadge progress={progress} remainingSec={remainingSec} />
+                      </div>
                       <span
-                        className={`inline-flex h-9 w-9 items-center justify-center rounded-full border transition-all ${
-                          copiedId === entry.id
+                        className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-[12px] font-medium transition-all ${
+                          isCopied
                             ? 'border-[#000000] bg-[#000000] text-[#fdfcfc] dark:border-[#fdfcfc] dark:bg-[#fdfcfc] dark:text-[#000000]'
-                            : 'border-[#e5e5e5] bg-[#fdfcfc] text-[#000000] group-hover:border-[#000000] group-hover:bg-[#000000] group-hover:text-[#fdfcfc] dark:border-[#2f2c28] dark:bg-[#191816] dark:text-[#fdfcfc]'
+                            : 'border-[#e5e5e5] bg-[#fdfcfc] text-[#000000] group-hover:border-[#000000] group-hover:bg-[#000000] group-hover:text-[#fdfcfc] dark:border-[#2f2c28] dark:bg-[#11100f] dark:text-[#fdfcfc]'
                         }`}
                       >
-                        {copiedId === entry.id ? (
-                          <Check className="h-4 w-4 stroke-[2.2]" />
+                        {isCopied ? (
+                          <>
+                            <Check className="h-3.5 w-3.5 stroke-[2.4]" />
+                            <span>Copied</span>
+                          </>
                         ) : (
-                          <Copy className="h-3.5 w-3.5" />
+                          <>
+                            <Copy className="h-3.5 w-3.5" />
+                            <span>Copy</span>
+                          </>
                         )}
                       </span>
                     </div>
-
-                    <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                      <CircularTimerBadge progress={progress} remainingSec={remainingSec} />
-                      {remainingSec <= 5 && snap && (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-[#ebe8e4] bg-[#f5f3f1] px-2.5 py-0.5 text-[11px] text-[#44403b] dark:border-[#292623] dark:bg-[#191816] dark:text-[#fdfcfc]">
-                          <ArrowRight className="h-3 w-3 text-[#777169]" />
-                          {t.nextCodeLabel}:{' '}
-                          <span className="font-mono-tabular font-medium text-[#000000] dark:text-[#fdfcfc]">
-                            {snap.nextCode.slice(0, 3)} {snap.nextCode.slice(3)}
-                          </span>
-                        </span>
-                      )}
-                    </div>
                   </div>
+
+                  {remainingSec <= 5 && snap && (
+                    <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-[#ebe8e4] bg-[#f5f3f1] px-3 py-1 text-[11px] text-[#44403b] dark:border-[#292623] dark:bg-[#191816] dark:text-[#fdfcfc]">
+                      <ArrowRight className="h-3 w-3 text-[#777169]" />
+                      <span>{t.nextCodeLabel}:</span>
+                      <span className="font-mono-tabular font-medium text-[#000000] dark:text-[#fdfcfc]">
+                        {snap.nextCode.slice(0, 3)} {snap.nextCode.slice(3)}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
-                {/* Right: Crisp 6px Inputs + Black Filled Pill CTA */}
-                <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
-                  <div className="flex flex-wrap gap-2">
+                {/* Quick Naming + Full-Width Mobile Save CTA */}
+                <div className="flex flex-col gap-2.5 border-t border-[#ebe8e4] pt-3.5 lg:border-t-0 lg:pt-0 dark:border-[#292623]">
+                  <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
                     <input
                       type="text"
                       value={customSingleIssuer}
                       onChange={(e) => setCustomSingleIssuer(e.target.value)}
-                      placeholder="Tên hãng (VD: Google)"
-                      className="w-36 rounded-[6px] border border-[#ebe8e4] bg-[#f5f3f1] px-3 py-2 text-[13px] text-[#000000] placeholder:text-[#a59f97] focus:border-[#000000] focus:bg-[#fdfcfc] focus:outline-none dark:border-[#292623] dark:bg-[#191816] dark:text-[#fdfcfc]"
+                      placeholder="Dịch vụ (Google...)"
+                      className="w-full sm:w-36 rounded-[10px] sm:rounded-[6px] border border-[#ebe8e4] bg-[#f5f3f1] px-3 py-2 text-[16px] sm:text-[13px] text-[#000000] placeholder:text-[13px] placeholder:text-[#a59f97] focus:border-[#000000] focus:bg-[#fdfcfc] focus:outline-none dark:border-[#292623] dark:bg-[#191816] dark:text-[#fdfcfc]"
                     />
                     <input
                       type="text"
                       value={customSingleLabel}
                       onChange={(e) => setCustomSingleLabel(e.target.value)}
                       placeholder="Tài khoản / Email"
-                      className="w-44 rounded-[6px] border border-[#ebe8e4] bg-[#f5f3f1] px-3 py-2 text-[13px] text-[#000000] placeholder:text-[#a59f97] focus:border-[#000000] focus:bg-[#fdfcfc] focus:outline-none dark:border-[#292623] dark:bg-[#191816] dark:text-[#fdfcfc]"
+                      className="w-full sm:w-44 rounded-[10px] sm:rounded-[6px] border border-[#ebe8e4] bg-[#f5f3f1] px-3 py-2 text-[16px] sm:text-[13px] text-[#000000] placeholder:text-[13px] placeholder:text-[#a59f97] focus:border-[#000000] focus:bg-[#fdfcfc] focus:outline-none dark:border-[#292623] dark:bg-[#191816] dark:text-[#fdfcfc]"
                     />
                   </div>
 
@@ -382,7 +513,7 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
                         label: customSingleLabel.trim() || entry.label || '2FA',
                       })
                     }
-                    className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-2 text-[14px] font-medium transition-all ${
+                    className={`inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-2.5 sm:py-2 text-[14px] font-medium transition-all ${
                       alreadySaved
                         ? 'cursor-default border border-[#ebe8e4] bg-[#f5f3f1] text-[#777169] dark:border-[#292623] dark:bg-[#191816] dark:text-[#a59f97]'
                         : 'border border-[#000000] bg-[#000000] text-[#fdfcfc] hover:opacity-85 active:scale-97 dark:border-[#fdfcfc] dark:bg-[#fdfcfc] dark:text-[#000000]'
@@ -414,19 +545,19 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.22 }}
-            className="relative z-10 mt-5 space-y-3 border-t border-[#ebe8e4] pt-5 dark:border-[#292623]"
+            className="relative z-10 mt-4 md:mt-5 space-y-3 border-t border-[#ebe8e4] pt-4 md:pt-5 dark:border-[#292623]"
           >
-            <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
               <div className="inline-flex items-center gap-2 text-[13px] font-medium text-[#44403b] dark:text-[#a59f97]">
-                <span className="h-2 w-2 rounded-full bg-[#0447ff]" />
+                <span className="h-2 w-2 rounded-full bg-[#10B981]" />
                 <span>{t.quickResultCount(parsedEntries.length)}</span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
                 <button
                   type="button"
                   onClick={handleCopyAllBulk}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#e5e5e5] bg-[#fdfcfc] px-3.5 py-1.5 text-[13px] font-medium text-[#000000] transition-colors hover:bg-[#ebe8e4]/70 dark:border-[#2f2c28] dark:bg-[#11100f] dark:text-[#fdfcfc]"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[#e5e5e5] bg-[#fdfcfc] px-3.5 py-2 sm:py-1.5 text-[12px] sm:text-[13px] font-medium text-[#000000] transition-colors active:scale-97 hover:bg-[#ebe8e4]/70 dark:border-[#2f2c28] dark:bg-[#11100f] dark:text-[#fdfcfc]"
                 >
                   <Copy className="h-3.5 w-3.5" />
                   <span>{t.copyAllBtn}</span>
@@ -434,7 +565,7 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
                 <button
                   type="button"
                   onClick={() => onSaveAllToVault(parsedEntries)}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#000000] bg-[#000000] px-4 py-1.5 text-[13px] font-medium text-[#fdfcfc] transition-opacity hover:opacity-85 active:scale-97 dark:border-[#fdfcfc] dark:bg-[#fdfcfc] dark:text-[#000000]"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[#000000] bg-[#000000] px-4 py-2 sm:py-1.5 text-[12px] sm:text-[13px] font-medium text-[#fdfcfc] transition-opacity hover:opacity-85 active:scale-97 dark:border-[#fdfcfc] dark:bg-[#fdfcfc] dark:text-[#000000]"
                 >
                   <BookmarkPlus className="h-3.5 w-3.5" />
                   <span>{t.saveAllBtn}</span>
@@ -458,23 +589,25 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
                       onSmartCopyEntry(`${entry.issuer} (${entry.label})`, snap);
                       triggerRowCopied(entry.id);
                     }}
-                    className="group flex cursor-pointer items-center justify-between gap-3 rounded-[16px] border border-[#ebe8e4] bg-[#fdfcfc] px-4 py-3 transition-all hover:border-[#000000]/35 dark:border-[#292623] dark:bg-[#11100f] dark:hover:border-[#fdfcfc]/30"
+                    className="group flex cursor-pointer items-center justify-between gap-2.5 rounded-[16px] border border-[#ebe8e4] bg-[#fdfcfc] px-3.5 py-3 transition-all active:scale-[0.985] hover:border-[#000000]/35 dark:border-[#292623] dark:bg-[#11100f] dark:hover:border-[#fdfcfc]/30"
                   >
-                    <div className="flex min-w-0 items-center gap-3">
-                      <div className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] ${brand.plateClass}`}>
+                    <div className="flex min-w-0 items-center gap-2.5">
+                      <div
+                        className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] ${brand.plateClass}`}
+                      >
                         {brand.icon}
                       </div>
                       <div className="min-w-0">
                         <p className="truncate text-[13px] font-medium text-[#000000] dark:text-[#fdfcfc]">
                           {entry.issuer}
                         </p>
-                        <p className="truncate text-[12px] text-[#777169] dark:text-[#a59f97]">
+                        <p className="truncate text-[11.5px] text-[#777169] dark:text-[#a59f97]">
                           {entry.label}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex flex-shrink-0 items-center gap-2.5">
+                    <div className="flex flex-shrink-0 items-center gap-2">
                       <OdometerCode
                         code={snap?.code ?? '000000'}
                         remainingSec={remainingSec}
@@ -492,7 +625,7 @@ export const QuickStudio: React.FC<QuickStudioProps> = ({
                         title={isSaved ? t.savedBadge : t.saveToVaultBtn}
                         className={`rounded-full p-1.5 transition-colors ${
                           isSaved
-                            ? 'text-[#000000] dark:text-[#fdfcfc]'
+                            ? 'text-[#10B981]'
                             : 'text-[#a59f97] hover:bg-[#ebe8e4] hover:text-[#000000] dark:hover:bg-[#262421] dark:hover:text-[#fdfcfc]'
                         }`}
                       >
