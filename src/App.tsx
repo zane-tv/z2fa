@@ -40,6 +40,7 @@ import { Z2FALogo } from './components/Z2FALogo';
 import { DynamicIslandToast } from './components/DynamicIslandToast';
 import { QuickStudio } from './components/QuickStudio';
 import { TotpCard } from './components/TotpCard';
+import { SeoEditorialSection } from './components/SeoEditorialSection';
 import {
   AccountFormModal,
   BackupRestoreModal,
@@ -84,6 +85,19 @@ export const App: React.FC = () => {
   useEffect(() => {
     document.documentElement.lang = lang;
     localStorage.setItem(STORAGE_KEYS.LANG, lang);
+    document.title =
+      lang === 'vi'
+        ? 'Lấy Mã 2FA Online & Quét QR Tức Thì | Z2FA Authenticator'
+        : 'Instant 2FA & TOTP Code Generator Online | Z2FA Authenticator';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        'content',
+        lang === 'vi'
+          ? 'Công cụ lấy mã 2FA (TOTP) online miễn phí từ Secret Key, chuỗi UID|PASS|2FA hoặc ảnh chụp QR. Bảo mật 100% trên trình duyệt với khóa kho AES-256 tại Z2FA.'
+          : 'Free client-side 2FA (TOTP) generator from Base32 Secret keys, bulk UID|PASS|2FA strings, or QR screenshots. 100% browser-local with AES-256 vault encryption.'
+      );
+    }
   }, [lang]);
 
   /* Vault State */
@@ -1199,8 +1213,8 @@ export const App: React.FC = () => {
 
       {/* Main Container: Tabbed Native App View on Mobile (< md), Unified Editorial Workspace on Desktop (>= md) */}
       <main className="mx-auto max-w-[1280px] px-4 pt-4 sm:px-10 sm:pt-10 lg:px-16">
-        {/* DESKTOP UNIFIED WORKSPACE (>= md) */}
-        <div className="hidden md:block">
+        {/* Single Mounted QuickStudio (Exactly ONE <h1> in DOM for 100/100 On-Page SEO) */}
+        <div className={mobileTab === 'quick' ? 'block' : 'hidden md:block'}>
           <QuickStudio
             inputValue={quickInput}
             onInputChange={setQuickInput}
@@ -1214,41 +1228,20 @@ export const App: React.FC = () => {
             onUploadQrFile={handleQrImageBlob}
             onOpenCamera={() => setCameraOpen(true)}
           />
+        </div>
 
-          <hr className="my-12 border-t border-[#ebe8e4] sm:my-14 dark:border-[#292623]" />
+        <hr className="my-12 hidden border-t border-[#ebe8e4] md:block sm:my-14 dark:border-[#292623]" />
 
+        {/* Single Mounted Vault Section */}
+        <div className={mobileTab === 'vault' ? 'block' : 'hidden md:block'}>
           {renderVaultSection()}
         </div>
 
-        {/* MOBILE APP TABBED SHELL (< md) */}
-        <div className="md:hidden">
-          {mobileTab === 'vault' && renderVaultSection()}
+        {/* Mobile Tools / Security Tab (< md) */}
+        {mobileTab === 'settings' && renderMobileSettingsTab()}
 
-          {mobileTab === 'quick' && (
-            <motion.div
-              key="mobile-quick"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.18 }}
-            >
-              <QuickStudio
-                inputValue={quickInput}
-                onInputChange={setQuickInput}
-                nowMs={nowMs}
-                savedSecretsSet={savedSecretsSet}
-                t={t}
-                onSmartCopyEntry={performSmartCopy}
-                onSaveEntryToVault={handleSaveEntryToVault}
-                onSaveAllToVault={handleSaveAllToVault}
-                onCopyTextDirect={copyPlainText}
-                onUploadQrFile={handleQrImageBlob}
-                onOpenCamera={() => setCameraOpen(true)}
-              />
-            </motion.div>
-          )}
-
-          {mobileTab === 'settings' && renderMobileSettingsTab()}
-        </div>
+        {/* Shared Semantic Editorial Guide, FAQ & Footer (Mobile-First Indexing Parity) */}
+        <SeoEditorialSection lang={lang} />
       </main>
 
       {/* Native Mobile Bottom Tab Bar (< md, Thumb-Zone Navigation + Safe Area Inset) */}

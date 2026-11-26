@@ -1,0 +1,14 @@
+# Z2FA — Precision 2FA Studio & Vault
+
+> Z2FA (https://z2fa.devlab.vn) là công cụ lấy mã 2FA (TOTP chuẩn RFC 6238) tức thì và kho quản lý xác thực hai lớp bảo mật AES-256-GCM chạy 100% trên trình duyệt (Zero-Knowledge Client-Side).
+
+## Tính năng cốt lõi
+- **Lấy mã 2FA tức thì (Instant TOTP Studio)**: Dán 1 hoặc hàng loạt chuỗi Base32 Secret, chuỗi định dạng `UID|PASS|2FA_SECRET|EMAIL`, link `otpauth://totp/...`, hoặc mã chuyển dữ liệu `otpauth-migration://` từ Google Authenticator để nhận mã 6/8 số theo thời gian thực.
+- **Đọc mã QR thông minh**: Hỗ trợ ấn `Ctrl+V` dán trực tiếp ảnh chụp màn hình mã QR, kéo-thả file ảnh QR, hoặc quét trực tiếp bằng Camera thiết bị.
+- **Smart Copy chống hết hạn**: Tự động hé lộ mã của chu kỳ kế tiếp khi còn ≤ 5 giây và tự động sao chép mã chu kỳ mới nếu người dùng bấm copy ở ≤ 2 giây cuối.
+- **Kho bảo mật Zero-Knowledge (AES-256-GCM)**: Lưu trữ cục bộ hoàn toàn trên trình duyệt người dùng thông qua Web Crypto API (`PBKDF2` 210.000 vòng + `AES-256-GCM`). Không gửi khóa bí mật lên bất kỳ máy chủ nào.
+- **PWA Offline**: Có thể cài đặt như ứng dụng độc lập trên iOS, Android, macOS, Windows và lấy mã ngay cả khi không có kết nối mạng.
+
+## Liên kết chính thức
+- Website: https://z2fa.devlab.vn/
+- Mã nguồn mở (MIT): https://github.com/zane-tv/z2fa

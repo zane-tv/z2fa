@@ -1,28 +1,226 @@
 <!doctype html>
-<html lang="vi">
+<html lang="vi" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <meta name="theme-color" content="#fdfcfc" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Z2FA" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- Primary SEO Meta Tags (Front-loaded Keyword + High-CTR Value Proposition) -->
+    <title>Lấy Mã 2FA Online &amp; Quét QR Tức Thì | Z2FA Authenticator</title>
     <meta
       name="description"
-      content="Z2FA — Công cụ lấy mã 2FA tức thì & kho lưu trữ bảo mật AES-256 trực tiếp trên trình duyệt."
+      content="Công cụ lấy mã 2FA (TOTP) online miễn phí từ Secret Key, chuỗi UID|PASS|2FA hoặc ảnh chụp QR. Bảo mật 100% trên trình duyệt với khóa kho AES-256 tại Z2FA."
     />
-    <title>Z2FA — Precision 2FA Studio & Vault</title>
+    <meta
+      name="keywords"
+      content="lấy mã 2fa, 2fa online, 2fa live, trình tạo mã 2fa, totp generator, quét qr 2fa từ ảnh, uid pass 2fa, google authenticator online, z2fa"
+    />
+    <meta name="author" content="zane-tv" />
+    <meta name="application-name" content="Z2FA" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+
+    <!-- Canonical & Internationalization -->
+    <link rel="canonical" href="https://z2fa.devlab.vn/" />
+    <link rel="alternate" hreflang="vi" href="https://z2fa.devlab.vn/" />
+    <link rel="alternate" hreflang="en" href="https://z2fa.devlab.vn/" />
+    <link rel="alternate" hreflang="x-default" href="https://z2fa.devlab.vn/" />
+
+    <!-- Favicons & Mobile App Meta -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#fdfcfc" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Z2FA" />
+
+    <!-- Open Graph (Facebook, Zalo, Telegram, Discord, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Z2FA" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:url" content="https://z2fa.devlab.vn/" />
+    <meta
+      property="og:title"
+      content="Lấy Mã 2FA Online &amp; Quét QR Tức Thì | Z2FA Authenticator"
+    />
+    <meta
+      property="og:description"
+      content="Dán Secret Key, chuỗi UID|PASS|2FA hoặc ấn Ctrl+V dán ảnh chụp mã QR để lấy mã 6 số ngay lập tức. Lưu trữ cục bộ chuẩn AES-256 trên trình duyệt."
+    />
+    <meta property="og:image" content="https://z2fa.devlab.vn/og-image.png" />
+    <meta property="og:image:secure_url" content="https://z2fa.devlab.vn/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Z2FA — Trình lấy mã 2FA tức thì và kho lưu trữ bảo mật AES-256 trên trình duyệt"
+    />
+
+    <!-- Twitter / X Large Summary Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://z2fa.devlab.vn/" />
+    <meta
+      name="twitter:title"
+      content="Lấy Mã 2FA Online &amp; Quét QR Tức Thì | Z2FA Authenticator"
+    />
+    <meta
+      name="twitter:description"
+      content="Dán Secret Key, chuỗi UID|PASS|2FA hoặc ấn Ctrl+V dán ảnh chụp mã QR để lấy mã 6 số ngay lập tức. Bảo mật 100% Client-Side."
+    />
+    <meta name="twitter:image" content="https://z2fa.devlab.vn/og-image.png" />
+
+    <!-- Fonts (Preconnect + Swap for Fast LCP & Zero FOIT) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Schema.org JSON-LD Structured Data (@graph: WebSite, Organization, WebApplication, HowTo, FAQPage) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://z2fa.devlab.vn/#organization",
+            "name": "Z2FA",
+            "url": "https://z2fa.devlab.vn/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://z2fa.devlab.vn/pwa-512x512.png",
+              "width": 512,
+              "height": 512
+            },
+            "sameAs": ["https://github.com/zane-tv/z2fa"]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://z2fa.devlab.vn/#website",
+            "url": "https://z2fa.devlab.vn/",
+            "name": "Z2FA — Precision 2FA Studio & Vault",
+            "publisher": { "@id": "https://z2fa.devlab.vn/#organization" },
+            "inLanguage": ["vi-VN", "en-US"]
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://z2fa.devlab.vn/#webapp",
+            "name": "Z2FA",
+            "alternateName": "Z2FA Online 2FA & TOTP Authenticator",
+            "url": "https://z2fa.devlab.vn/",
+            "image": "https://z2fa.devlab.vn/og-image.png",
+            "description": "Công cụ lấy mã 2FA (TOTP chuẩn RFC 6238) tức thì từ Secret Key, chuỗi UID|PASS|2FA hoặc ảnh chụp mã QR, tích hợp kho lưu trữ cục bộ mã hóa AES-256-GCM.",
+            "applicationCategory": "SecurityApplication",
+            "operatingSystem": "All",
+            "browserRequirements": "Requires JavaScript and Web Crypto API",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "featureList": [
+              "Lấy mã 2FA 6 số và 8 số tức thì từ Base32 Secret Key",
+              "Tự động tách mã từ hàng loạt dòng định dạng UID|PASS|2FA_SECRET",
+              "Dán Ctrl+V ảnh chụp màn hình mã QR hoặc quét trực tiếp bằng Camera",
+              "Smart Copy tự động sao chép mã chu kỳ mới khi còn dưới 2 giây",
+              "Lưu trữ cục bộ 100% trên trình duyệt kèm khóa bảo mật AES-256-GCM",
+              "Hỗ trợ cài đặt ứng dụng PWA hoạt động ngoại tuyến (Offline)"
+            ],
+            "author": { "@id": "https://z2fa.devlab.vn/#organization" }
+          },
+          {
+            "@type": "HowTo",
+            "@id": "https://z2fa.devlab.vn/#howto",
+            "name": "Cách lấy mã 2FA online nhanh bằng Z2FA",
+            "description": "Ba bước đơn giản để lấy mã xác thực 2 lớp (TOTP) từ chuỗi khóa bí mật hoặc ảnh chụp mã QR ngay trên trình duyệt.",
+            "totalTime": "PT10S",
+            "step": [
+              {
+                "@type": "HowToStep",
+                "position": 1,
+                "name": "Nhập Secret Key hoặc tải mã QR",
+                "text": "Dán chuỗi Base32 Secret, dòng định dạng UID|PASS|2FA, link otpauth:// vào khung Lấy Mã Tức Thì, hoặc nhấn Ctrl+V để dán thẳng ảnh chụp màn hình mã QR."
+              },
+              {
+                "@type": "HowToStep",
+                "position": 2,
+                "name": "Nhận và sao chép mã 6 số thông minh",
+                "text": "Z2FA tự động tính toán mã 6 số theo thời gian thực ngay trên trình duyệt. Chạm vào thẻ để sao chép; nếu còn dưới 2 giây, hệ thống tự lấy sẵn mã của chu kỳ kế tiếp."
+              },
+              {
+                "@type": "HowToStep",
+                "position": 3,
+                "name": "Lưu vào kho cá nhân & khóa AES-256",
+                "text": "Nhấn Lưu vào kho cho các tài khoản dùng thường xuyên, gắn nhãn phân loại và tùy chọn đặt mật khẩu mã hóa AES-256-GCM hoặc xuất file Backup JSON."
+              }
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://z2fa.devlab.vn/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Z2FA có lưu trữ hay gửi mã Secret 2FA của tôi lên máy chủ không?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Hoàn toàn không. Mọi phép tính tạo mã TOTP (RFC 6238), giải mã ảnh QR và khóa kho AES-256-GCM đều chạy 100% cục bộ trên trình duyệt bằng Web Crypto API. Không có bất kỳ dữ liệu tài khoản nào được truyền ra ngoài."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Làm sao để lấy mã 2FA từ chuỗi định dạng UID|PASS|2FA hoặc nhiều tài khoản cùng lúc?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Bạn chỉ cần dán trực tiếp một hoặc nhiều dòng có dạng UID|PASS|2FA_SECRET|EMAIL vào khung Lấy Mã Tức Thì. Z2FA sẽ tự động nhận diện đoạn mã Base32 Secret trên từng dòng và hiển thị danh sách mã 6 số sống theo thời gian thực."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Có thể lấy mã 2FA từ ảnh chụp màn hình mã QR mà không cần điện thoại không?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Có. Bạn có thể bấm Ctrl+V (hoặc Cmd+V trên Mac) ở bất kỳ đâu trên trang Z2FA ngay sau khi chụp màn hình mã QR, hoặc kéo-thả file ảnh vào cửa sổ web để giải mã tức thì, kể cả ảnh QR xuất hàng loạt từ Google Authenticator."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Tại sao tôi nhập mã 2FA đúng nhưng trang đăng nhập báo mã không hợp lệ?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Mã TOTP phụ thuộc chính xác vào múi giờ và đồng hồ hệ thống theo chu kỳ 30 giây. Hãy kiểm tra cài đặt ngày giờ trên máy tính hoặc điện thoại của bạn đã bật chế độ Tự động đồng bộ thời gian Internet (Automatic Time) chưa."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Tính năng Smart Copy chống hết hạn trên Z2FA hoạt động như thế nào?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Khi đồng hồ đếm ngược còn từ 5 giây trở xuống, Z2FA tự động hé lộ trước Mã kế tiếp. Đặc biệt khi còn từ 2 giây trở xuống, thao tác chạm copy sẽ tự động sao chép sẵn mã của chu kỳ 30 giây mới để bạn sang tab đăng nhập dán vào không bao giờ bị hết hạn."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body class="antialiased selection:bg-black selection:text-[#fdfcfc]">
     <div id="root"></div>
+    <noscript>
+      <main style="max-width: 720px; margin: 48px auto; padding: 24px; font-family: sans-serif; line-height: 1.6;">
+        <h1>Z2FA — Công cụ lấy mã 2FA Online &amp; Kho lưu trữ bảo mật AES-256</h1>
+        <p>
+          Z2FA giúp bạn lấy mã xác thực hai lớp (TOTP 6 số / 8 số chuẩn RFC 6238) tức thì từ Base32 Secret Key, chuỗi UID|PASS|2FA hoặc ảnh chụp mã QR. Xử lý 100% trực tiếp trên trình duyệt — vui lòng bật JavaScript để sử dụng ứng dụng.
+        </p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
