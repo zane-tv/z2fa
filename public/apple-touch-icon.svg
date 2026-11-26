@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" fill="none">
+  <rect width="180" height="180" rx="40" fill="#fdfcfc" />
+  <defs>
+    <radialGradient id="av" cx="25%" cy="25%" r="65%">
+      <stop offset="0%" stop-color="#0447ff" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#0447ff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="ao" cx="75%" cy="75%" r="65%">
+      <stop offset="0%" stop-color="#ff4704" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#ff4704" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="180" height="180" rx="40" fill="url(#av)" />
+  <rect width="180" height="180" rx="40" fill="url(#ao)" />
+  <g transform="translate(18, 18) scale(2.25)">
+    <path
+      d="M17 17.5C17 16.6716 17.6716 16 18.5 16H45.2C46.5364 16 47.2057 17.6157 46.2607 18.5607L24.1213 40.7C23.5587 41.2626 22.7956 41.5787 22 41.5787H17.8C16.9091 41.5787 16.4629 40.5016 17.0929 39.8716L35.4 21.5H18.5C17.6716 21.5 17 20.8284 17 20V17.5Z"
+      fill="#000000"
+    />
+    <path
+      d="M47 46.5C47 47.3284 46.3284 48 45.5 48H18.8C17.4636 48 16.7943 46.3843 17.7393 45.4393L39.8787 23.3C40.4413 22.7374 41.2044 22.4213 42 22.4213H46.2C47.0909 22.4213 47.5371 23.4984 46.9071 24.1284L28.6 42.5H45.5C46.3284 42.5 47 43.1716 47 44V46.5Z"
+      fill="#44403b"
+    />
+    <circle cx="32" cy="32" r="2.1" fill="#ff4704" />
+  </g>
+</svg>

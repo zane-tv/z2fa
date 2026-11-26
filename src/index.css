@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Colors from DESIGN.md */
+  --color-eggshell: #fdfcfc;
+  --color-warm-taupe: #f5f3f1;
+  --color-stone: #ebe8e4;
+  --color-ink: #000000;
+  --color-graphite: #44403b;
+  --color-smoke: #777169;
+  --color-ash: #a59f97;
+  --color-violet-spark: #0447ff;
+  --color-ember-orange: #ff4704;
+
+  /* Typography */
+  --font-waldenburg: 'Waldenburg', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-geist-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Shadows from DESIGN.md */
+  --shadow-subtle: rgba(0, 0, 0, 0.4) 0px 0px 1px 0px, rgba(0, 0, 0, 0.04) 0px 1px 1px 0px, rgba(0, 0, 0, 0.04) 0px 2px 4px 0px;
+  --shadow-subtle-2: rgba(0, 0, 0, 0.075) 0px 0px 0px 0.5px inset;
+  --shadow-subtle-3: rgba(0, 0, 0, 0.1) 0px 0px 0px 0.5px inset;
+  --shadow-subtle-4: rgba(0, 0, 0, 0.1) 0px 0px 0px 1px inset;
+  --shadow-subtle-5: rgba(0, 0, 0, 0.4) 0px 0px 1px 0px, rgba(0, 0, 0, 0.04) 0px 2px 4px 0px;
+  --shadow-subtle-6: rgba(255, 255, 255, 0.6) 0px 0px 0px 1px inset;
+  --shadow-subtle-7: rgb(235, 232, 228) 0px 0px 0px 0.5px inset;
+}
+
+:root {
+  --color-eggshell: #fdfcfc;
+  --color-warm-taupe: #f5f3f1;
+  --color-stone: #ebe8e4;
+  --color-ink: #000000;
+  --color-graphite: #44403b;
+  --color-smoke: #777169;
+  --color-ash: #a59f97;
+  --color-violet-spark: #0447ff;
+  --color-ember-orange: #ff4704;
+
+  --surface-canvas: #fdfcfc;
+  --surface-taupe: #f5f3f1;
+  --surface-stone: #ebe8e4;
+  --border-hairline: #ebe8e4;
+  --border-button: #e5e5e5;
+  --spotlight-color: rgba(68, 64, 59, 0.04);
+}
+
+/* Optional warm-ink dark paper reading mode if toggled */
+.dark {
+  --surface-canvas: #11100f;
+  --surface-taupe: #191816;
+  --surface-stone: #262421;
+  --border-hairline: #292623;
+  --border-button: #2f2c28;
+  --spotlight-color: rgba(253, 252, 252, 0.035);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-inter);
+    background-color: var(--surface-canvas);
+    color: var(--color-ink);
+    scroll-behavior: smooth;
+    font-feature-settings: "ss01" 1, "cv02" 1;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--surface-canvas);
+    color: #000000;
+    letter-spacing: 0.01em;
+    overflow-x: hidden;
+    transition: background-color 220ms cubic-bezier(0.2, 0, 0, 1), color 220ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .dark body {
+    color: #fdfcfc;
+  }
+}
+
+/* Whisper-weight Waldenburg / Inter 300 Display Headlines (-0.02em tracking) */
+.font-editorial-display {
+  font-family: var(--font-waldenburg);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  font-feature-settings: "ss01" 1;
+}
+
+/* Geist Mono Technical & Odometer Numerals */
+.font-mono-tabular {
+  font-family: var(--font-geist-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Whisper Shadow from DESIGN.md */
+.whisper-shadow {
+  box-shadow:
+    rgba(0, 0, 0, 0.4) 0px 0px 1px 0px,
+    rgba(0, 0, 0, 0.04) 0px 1px 1px 0px,
+    rgba(0, 0, 0, 0.04) 0px 2px 4px 0px;
+}
+
+.dark .whisper-shadow {
+  box-shadow:
+    rgba(255, 255, 255, 0.14) 0px 0px 1px 0px,
+    rgba(0, 0, 0, 0.35) 0px 2px 6px 0px;
+}
+
+.inset-hairline {
+  box-shadow: rgba(0, 0, 0, 0.075) 0px 0px 0px 0.5px inset;
+}
+
+/* Signature Product Sphere Visual (Violet Spark #0447ff + Ember Orange #ff4704) */
+.product-sphere-orb {
+  background:
+    radial-gradient(circle at 30% 28%, rgba(4, 71, 255, 0.88) 0%, rgba(4, 71, 255, 0) 58%),
+    radial-gradient(circle at 72% 68%, rgba(255, 71, 4, 0.86) 0%, rgba(255, 71, 4, 0) 60%),
+    radial-gradient(circle at 52% 48%, rgba(255, 176, 198, 0.72) 0%, rgba(245, 243, 241, 0) 72%);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d6d1cb;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a59f97;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
